@@ -44,16 +44,14 @@ public class PushDataActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dronestatus);
-
+        DS = new DroneStatusInfo();
+        DS.setDrone_id(this.getString(R.string.drone_id));
+        initUI();
+        initFlightController();
+        myHandler = new MyHandler();
         IntentFilter filter = new IntentFilter();
         filter.addAction(DJSDKApplication.FLAG_CONNECTION_CHANGE);
         registerReceiver(mReceiver, filter);
-        myHandler = new MyHandler();
-        DS = new DroneStatusInfo();
-        DS.setDrone_id(this.getString(R.string.drone_id));
-
-        initUI();
-        initFlightController();
     }
 
     class MyHandler extends Handler {
@@ -71,10 +69,12 @@ public class PushDataActivity extends Activity {
             // 此处可以更新UI
             Bundle b = msg.getData();
             String drone_id = b.getString("uavid");
-            if(drone_id.equals(DS.getDrone_id())){
-                webpostflag = true;
-            } else {
-                webpostflag = false;
+            if(drone_id != null) {
+                if (drone_id.equals(DS.getDrone_id())) {
+                    webpostflag = true;
+                } else {
+                    webpostflag = false;
+                }
             }
         }
     }

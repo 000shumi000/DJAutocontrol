@@ -40,6 +40,8 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -100,6 +102,7 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
     private double droneStartLat,droneStartLng;
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
+    private int target_station_id = 0;
 
     private float altitude = 10.0f;
     private FlightController mFlightController;
@@ -119,6 +122,37 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
     private double latitude_1cm = 1.141255544679108e-5/100;
     private double longitude_1cm = 8.993216192195822e-6/100;
 
+    private Timer mtimer = null;
+    private TimerTask autofreshTask = null;
+
+    private void startTimer(){
+        if(mtimer == null){
+            mtimer = new Timer();
+        }
+        if(autofreshTask == null){
+            autofreshTask = new TimerTask() {
+                @Override
+                public void run() {
+                    webrequest.Get_chargesite_gps_info(myHandler);
+                }
+            };
+        }
+        if((mtimer != null)&&(autofreshTask != null)){
+            mtimer.scheduleAtFixedRate(autofreshTask,1000,1000);
+        }
+    }
+
+    private void stopTimer(){
+        if (mtimer != null) {
+            mtimer.cancel();
+            mtimer = null;
+        }
+        if(autofreshTask != null){
+            autofreshTask.cancel();
+            autofreshTask = null;
+        }
+    }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -128,6 +162,12 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
     @Override
     protected void onPause(){
         super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopTimer();
     }
 
     @Override
@@ -215,16 +255,24 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
             // 此处可以更新UI
             Bundle b = msg.getData();
             SparseArray<ChargeStationInfo> stationInfos_temp = webrequest.chargeStationgpsInfoHandler(b);
-            for(int i = 0;i<stationInfos_temp.size();i++){
-                int station_id = stationInfos_temp.keyAt(i);
-                ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
-                if(stationInfos.indexOfKey(stationInfos_temp.keyAt(i)) == -1){    //no data
-                    stationInfos.append(station_id,updatetationInfo);
-                }
-                else { //update data
+            if(stationInfos_temp != null) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        aMap.clear();
+                    }
+                });
+                markphone();
+                for (int i = 0; i < stationInfos_temp.size(); i++) {
+                    int station_id = stationInfos_temp.keyAt(i);
+                    ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
+                    if (stationInfos.indexOfKey(stationInfos_temp.keyAt(i)) == -1) {    //no data
+                        stationInfos.append(station_id, updatetationInfo);
+                    } else { //update data
                         stationInfos.put(station_id, updatetationInfo);
+                    }
+                    markchargesite(updatetationInfo.getStationPos(), "" + station_id);
                 }
-                markchargesite(updatetationInfo.getStationPos(), "" + station_id);
             }
         }
     }
@@ -321,14 +369,12 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
 
     // Update the drone location based on states from MCU.
     private void updateDroneLocation(){
-
         LatLng pos = gps_converter(new LatLng(droneLocationLat, droneLocationLng));
         //Create MarkerOptions object
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(pos);
         markerOptions.title("drone");
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.aircraft));
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -343,15 +389,33 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
         });
     }
 
-    private void markchargesite(LatLng point,String station_id){
+    private void markchargesite(final LatLng point,String station_id){
         //Create MarkerOptions object
-        MarkerOptions markerOptions = new MarkerOptions();
+        final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.charge_site));
         markerOptions.title("charge station");
         markerOptions.snippet(station_id);
-        Marker marker = aMap.addMarker(markerOptions);
-        mMarkers.put(mMarkers.size(), marker);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (checkGpsCoordination(point.latitude, point.longitude)) {
+                    Marker marker = aMap.addMarker(markerOptions);
+                    mMarkers.put(mMarkers.size(), marker);
+                }
+            }
+        });
+    }
+
+    private void markphone(){
+        PhoneLocationApplication.initLocation(this);
+        final LatLng phone_location = gps_converter(new LatLng(PhoneLocationApplication.latitude, PhoneLocationApplication.longitude));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                aMap.addMarker(new MarkerOptions().position(phone_location).title("phone"));
+            }
+        });
     }
 
     @Override
@@ -363,7 +427,7 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
                 break;
             }
             case R.id.followme_search:{
-                webrequest.Get_chargesite_gps_info(myHandler);
+                startTimer();
                 break;
             }
             case R.id.followme_gosite:{
@@ -416,10 +480,7 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==  STATION_STATUS_CODE){
             if(resultCode == SET_STATION_AS_TARGET){
-                int target_station_id = Integer.parseInt(data.getStringExtra("station_id"));
-                ChargeStationInfo chargeStationInfo = stationInfos.get(target_station_id);
-                LatLng gps_point = AmapToGpsUtil.toGPSPoint(chargeStationInfo.getStationPos().latitude,chargeStationInfo.getStationPos().longitude);
-                movingObjectLocation = new LocationCoordinate2D(gps_point.latitude,gps_point.longitude);
+                target_station_id = Integer.parseInt(data.getStringExtra("station_id"));
                 setResultToToast("Set target addr: charge station "+ target_station_id);
             }
         }
@@ -436,6 +497,13 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
         if(followMeMissionOperator != null) {
             if (followMeMissionOperator.getCurrentState().toString().equals(FollowMeMissionState.READY_TO_EXECUTE.toString())) {
                 //ToDo: You need init or get the location of your moving object which will be followed by the aircraft.
+                if(target_station_id != 0){
+                    ChargeStationInfo chargeStationInfo = stationInfos.get(target_station_id);
+                    LatLng gps_point = AmapToGpsUtil.toGPSPoint(chargeStationInfo.getStationPos().latitude,chargeStationInfo.getStationPos().longitude);
+                    if(checkGpsCoordination(gps_point.latitude,gps_point.longitude)) {
+                        movingObjectLocation = new LocationCoordinate2D(gps_point.latitude, gps_point.longitude);
+                    }
+                }
                 if(movingObjectLocation != null) {
                     droneStartLat = droneLocationLat;
                     droneStartLng = droneLocationLng;
@@ -450,6 +518,13 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
                         timmerSubcription = timer.subscribe(new Action1<Long>() {
                             @Override
                             public void call(Long aLong) {
+                                if(target_station_id != 0){
+                                    ChargeStationInfo chargeStationInfo = stationInfos.get(target_station_id);
+                                    LatLng gps_point = AmapToGpsUtil.toGPSPoint(chargeStationInfo.getStationPos().latitude,chargeStationInfo.getStationPos().longitude);
+                                    if(checkGpsCoordination(gps_point.latitude,gps_point.longitude)) {
+                                        movingObjectLocation = new LocationCoordinate2D(gps_point.latitude, gps_point.longitude);
+                                    }
+                                }
                                 if(movingObjectLocation != null) {
                                     double now_latitude_different = (droneStartLat - movingObjectLocation.getLatitude())/latitude_1cm;
                                     double now_longitude_different = (droneStartLng -movingObjectLocation.getLongitude())/longitude_1cm;

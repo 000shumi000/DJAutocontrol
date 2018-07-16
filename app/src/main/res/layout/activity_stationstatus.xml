@@ -18,97 +18,97 @@
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:scrollbars="vertical" >
             <LinearLayout
-                android:id="@+id/profile"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="70dp"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="@android:color/white"
-                    android:src="@mipmap/qqq1"/>
+                <LinearLayout
+                    android:id="@+id/profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
 
-                <TextView  style="@style/AppTheme.TitleLarge"
-                    android:id="@+id/textid"
-                    android:layout_marginTop="@dimen/padding_common"
-                    android:textColor="@android:color/white"
-                    android:text="充电站ID："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="70dp"
+                        app:civ_border_width="2dp"
+                        app:civ_border_color="@android:color/white"
+                        android:src="@mipmap/qqq1"/>
 
-                <TextView  style="@style/AppTheme.TitleLarge"
-                    android:id="@+id/textcontrol"
-                    android:layout_marginTop="@dimen/padding_common"
-                    android:textColor="@android:color/white"
-                    android:text="充电站状态："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.TitleLarge"
+                        android:id="@+id/textid"
+                        android:layout_marginTop="@dimen/padding_common"
+                        android:textColor="@android:color/white"
+                        android:text="充电站ID："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <TextView  style="@style/AppTheme.TitleLarge"
-                    android:id="@+id/textlon"
-                    android:layout_marginTop="6dp"
-                    android:textColor="@android:color/white"
-                    android:text="充电站位置："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.TitleLarge"
+                        android:id="@+id/textcontrol"
+                        android:layout_marginTop="@dimen/padding_common"
+                        android:textColor="@android:color/white"
+                        android:text="充电站状态："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <TextView  style="@style/AppTheme.TitleLarge"
-                    android:id="@+id/textlat"
-                    android:layout_marginTop="6dp"
-                    android:textColor="@android:color/white"
-                    android:text="充电站位置："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.TitleLarge"
+                        android:id="@+id/textlon"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@android:color/white"
+                        android:text="充电站位置："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <TextView  style="@style/AppTheme.Discription"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@android:color/white"
-                    android:text="版权所属"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.TitleLarge"
+                        android:id="@+id/textlat"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@android:color/white"
+                        android:text="充电站位置："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <TextView  style="@style/AppTheme.Discription"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@android:color/white"
-                    android:text="The Copyright of the Evil Fish Studio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.Discription"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@android:color/white"
+                        android:text="版权所属"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
-                    android:id="@+id/set_target_station"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="5dp"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="10dp"
-                    android:text="设置为目标站点"
-                    app:rv_strokeWidth="1dp"
-                    app:rv_isRadiusHalfHeight="true"
-                    app:rv_strokeColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    <TextView  style="@style/AppTheme.Discription"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@android:color/white"
+                        android:text="The Copyright of the Evil Fish Studio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-            </LinearLayout>
+                    <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
+                        android:id="@+id/set_target_station"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="5dp"
+                        android:paddingTop="10dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="10dp"
+                        android:text="设置为目标站点"
+                        app:rv_strokeWidth="1dp"
+                        app:rv_isRadiusHalfHeight="true"
+                        app:rv_strokeColor="@android:color/white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:clickable="false"
-                android:scrollbars="vertical" >
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -225,8 +225,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <com.github.mmin18.widget.RealtimeBlurView

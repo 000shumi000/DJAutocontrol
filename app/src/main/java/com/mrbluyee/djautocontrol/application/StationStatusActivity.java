@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,19 +29,11 @@ import java.util.TimerTask;
  */
 
 public class StationStatusActivity extends AppCompatActivity {
-    private int i = 0;
-    private int TIME = 1000;
 
-    public Boolean root;
-    public Boolean admin;
-    public Boolean user;
-    public String name;
     public String stationid;
     public String longitude;
     public String latitude;
-    public String stationstatus="";
     private TextView btn_set_target_station;
-
     public TextView text1;
     public TextView text2;
     public TextView text3;
@@ -82,7 +75,7 @@ public class StationStatusActivity extends AppCompatActivity {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 Toast.makeText(getApplicationContext(), "刷新成功", Toast.LENGTH_SHORT).show();
-                text1.setText("充电站状态：");
+                text1.setText("充电站负载状态：");
                 text2.setText("无人机电量：");
                 text3.setText("更新时间:  ");
                 text4.setText("无人机ID：");
@@ -115,13 +108,17 @@ public class StationStatusActivity extends AppCompatActivity {
         btn_set_target_station.setOnClickListener(new View.OnClickListener()//侦听登录点击事件
         {
             public void onClick(View v) {//设置目标站点
-        if(stationstatus.equals("0")) {
-            //充电站空闲
-            Intent intent = new Intent();
-            intent.putExtra("station_id", stationid);
-            setResult(SET_STATION_AS_TARGET, intent);
-            finish();
-        }
+                Log.d("btn_set_target", "button pressed");
+                if(chargeStationInfo.getStationStatus().equals("0")) {
+                    //充电站空闲
+                    Intent intent = new Intent();
+                    intent.putExtra("station_id", stationid);
+                    setResult(SET_STATION_AS_TARGET, intent);
+                    stopTimer();
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(),"station is not available",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -175,11 +172,11 @@ public class StationStatusActivity extends AppCompatActivity {
             chargeStationInfo = webrequest.chargeSiteInfoHandler(b);
             if (chargeStationInfo.getStationId()!=null && chargeStationInfo.getStationId() != "0") {
                 textid.setText("充电站ID：" + chargeStationInfo.getStationId());
-                text3.setText("更新时间：" + b.getString("updatetime"));
-                if (b.getString("uavid").equals("00000000")){
+                text3.setText("更新时间：" + chargeStationInfo.getStation_update_time());
+                if (chargeStationInfo.getDroneId().equals("00000000")){
                     text4.setText("无人机ID：");
                 }else {
-                    text4.setText("无人机ID：" + b.getString("uavid"));
+                    text4.setText("无人机ID：" + chargeStationInfo.getDroneId());
                 }
                 text2.setText("无人机电量：" + chargeStationInfo.getDronePow());
                 if (chargeStationInfo.getStationStatus().equals("0")) {
@@ -192,6 +189,11 @@ public class StationStatusActivity extends AppCompatActivity {
                     text1.setText("充电站负载状态： 已充满");
                 textlon.setText("经度：" + longitude);
                 textlat.setText("纬度：" + latitude);
+                if(chargeStationInfo.getStationcontrol().equals("0")) {
+                    textcontrol.setText("充电站状态: 关闭");
+                }else{
+                    textcontrol.setText("充电站状态: 开启");
+                }
             }
             if(b.getString("IntentErr")!=null && b.getString("IntentErr").equals("1"))
             {

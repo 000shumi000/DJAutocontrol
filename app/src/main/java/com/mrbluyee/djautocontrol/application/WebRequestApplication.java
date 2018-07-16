@@ -35,7 +35,7 @@ public class WebRequestApplication {
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
                     if (response.isSuccessful()) {
-                        Log.d("getgps","response.code()=="+response.code());
+                        //Log.d("getgps","response.code()=="+response.code());
                         result = response.body().string();
                         Message msg = new Message();
                         Bundle b = new Bundle();// 存放数据
@@ -52,12 +52,13 @@ public class WebRequestApplication {
 
     public SparseArray<ChargeStationInfo> chargeStationgpsInfoHandler(Bundle b)
     {
-        SparseArray<ChargeStationInfo> stationInfos = new SparseArray<ChargeStationInfo>();
+        SparseArray<ChargeStationInfo> stationInfos = null;
         JSONArray station_gps_jsonArray = null;
         String station_gps_data = b.getString("getgps");
         if(station_gps_data != null) {
-            Log.d("MyHandler", station_gps_data);
+            //Log.d("MyHandler", station_gps_data);
             try {
+                stationInfos = new SparseArray<ChargeStationInfo>();
                 station_gps_jsonArray = new JSONArray(station_gps_data);
                 for (int i = 0; i < station_gps_jsonArray.length(); i++) {
                     JSONObject jsonObject = station_gps_jsonArray.getJSONObject(i);
@@ -72,7 +73,7 @@ public class WebRequestApplication {
                     stationInfo.setStation_create_time(station_create_time);
                     stationInfo.setStation_update_time(station_update_time);
                     stationInfos.append(station_id, stationInfo);
-                    Log.d("MyHandler", "append station:"+ station_id);
+                    //Log.d("MyHandler", "append station:"+ station_id);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,7 +99,7 @@ public class WebRequestApplication {
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
                     if (response.isSuccessful()) {
-                        Log.d("getinfo","response.code()=="+response.code());
+                        //Log.d("getinfo","response.code()=="+response.code());
                         result = response.body().string();
                         Message msg = new Message();
                         Bundle b = new Bundle();// 存放数据
@@ -119,7 +120,7 @@ public class WebRequestApplication {
         JSONObject station_info_json = null;
         String station_info_data = b.getString("getinfo");
         if(station_info_data != null) {
-            Log.d("MyHandler", station_info_data);
+            //Log.d("MyHandler", station_info_data);
             try {
                 station_info_json = new JSONObject(station_info_data);
                 String station_id = station_info_json.getString("stationid");
@@ -160,7 +161,7 @@ public class WebRequestApplication {
                     Response response = null;
                     response = client.newCall(request).execute();//得到Response 对象
                     if (response.isSuccessful()) {
-                        Log.d("postdroneinfo", "response.code()==" + response.code());
+                        //Log.d("postdroneinfo", "response.code()==" + response.code());
                         result = response.body().string();
                     }
                 } catch (Exception e) {
