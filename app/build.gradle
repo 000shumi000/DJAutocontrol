@@ -11,6 +11,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         renderscriptSupportModeEnabled true
+        multiDexEnabled true
     }
     packagingOptions{
         doNotStrip "*/*/libdjivideo.so"
@@ -34,7 +35,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion '27.1.1'
+                }
+            }
+        }
+    }
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -44,7 +54,7 @@ dependencies {
     api 'com.amap.api:map2d:latest.integration'
     api 'com.amap.api:search:latest.integration'
     implementation project(':openCVLibrary341')
-
+    api 'com.dji:dji-uxsdk:4.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'//没有使用特殊Header，可以不加这行
     //1.0.4 出现问题可以回退到 1.0.3
@@ -58,5 +68,4 @@ dependencies {
 
     implementation 'com.squareup.okhttp:okhttp:2.0.0'
     implementation 'com.zhy:okhttputils:2.3.9'
-
 }

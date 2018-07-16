@@ -132,6 +132,11 @@
             android:name=".application.StationStatusActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".activity.AutomaticActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>

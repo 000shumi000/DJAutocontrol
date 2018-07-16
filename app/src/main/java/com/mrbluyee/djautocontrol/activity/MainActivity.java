@@ -108,7 +108,8 @@ public class MainActivity extends Activity implements OnClickListener{
                 break;
             }
             case R.id.automatic_handle_button:{
-
+                Intent intent = new Intent(this, AutomaticActivity.class);
+                startActivity(intent);
                 break;
             }
             default:

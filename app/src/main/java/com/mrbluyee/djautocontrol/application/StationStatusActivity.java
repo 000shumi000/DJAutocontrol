@@ -77,7 +77,7 @@ public class StationStatusActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "刷新成功", Toast.LENGTH_SHORT).show();
                 text1.setText("充电站负载状态：");
                 text2.setText("无人机电量：");
-                text3.setText("更新时间:  ");
+                text3.setText("更新时间:");
                 text4.setText("无人机ID：");
                 webrequest.Get_chargesite_info(myHandler,stationid);
                 RefreshLayout refreshLayout = findViewById(R.id.refreshLayout);
