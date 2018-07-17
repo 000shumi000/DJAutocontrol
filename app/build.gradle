@@ -23,6 +23,14 @@ android {
         doNotStrip "*/*/libFRCorkscrew.so"
         doNotStrip "*/*/libUpgradeVerify.so"
         doNotStrip "*/*/libFR.so"
+
+        pickFirst 'lib/*/libstlport_shared.so'
+        pickFirst 'lib/*/libRoadLineRebuildAPI.so'
+        pickFirst 'lib/*/libGNaviUtils.so'
+        pickFirst 'lib/*/libGNaviMapex.so'
+        pickFirst 'lib/*/libGNaviData.so'
+        pickFirst 'lib/*/libGNaviMap.so'
+        pickFirst 'lib/*/libGNaviSearch.so'
         exclude 'META-INF/rxjava.properties'
     }
     buildTypes {
@@ -53,6 +61,8 @@ dependencies {
     compileOnly 'com.dji:dji-sdk-provided:4.5.1'
     api 'com.amap.api:map2d:latest.integration'
     api 'com.amap.api:search:latest.integration'
+    api 'com.amap.api:3dmap:latest.integration'
+    api 'com.amap.api:location:latest.integration'
     implementation project(':openCVLibrary341')
     api 'com.dji:dji-uxsdk:4.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
