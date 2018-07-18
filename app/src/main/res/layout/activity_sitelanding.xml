@@ -12,6 +12,37 @@
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"/>
 
+    <dji.ux.widget.FPVOverlayWidget
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/activity_sitelanding_camera2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="@color/dark_gray"
+        android:orientation="horizontal">
+        <dji.ux.widget.AutoExposureLockWidget
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+        <dji.ux.widget.FocusModeWidget
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+        <dji.ux.widget.FocusExposureSwitchWidget
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+    </LinearLayout>
+
+    <dji.ux.widget.ManualFocusWidget
+        android:layout_alignTop="@+id/activity_sitelanding_camera2"
+        android:layout_toRightOf="@+id/activity_sitelanding_camera2"
+
+        android:layout_width="50dp"
+        android:layout_height="210dp"
+        tools:ignore="RtlHardcoded"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

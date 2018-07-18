@@ -44,11 +44,9 @@ import dji.common.gimbal.Rotation;
 import dji.common.gimbal.RotationMode;
 import dji.common.util.CommonCallbacks;
 
-public class CameraActivity extends FPVActivity implements TextureView.SurfaceTextureListener, View.OnClickListener,View.OnTouchListener {
+public class CameraActivity extends FPVActivity implements TextureView.SurfaceTextureListener, View.OnClickListener{
     private static final String TAG = CameraActivity.class.getName();
-    private Timer timer;
-    private GimbalRotateTimerTask gimbalRotationTimerTask;
-    private Button mCaptureBtn, mCameraRiseBtn, mCameraDownBtn;
+    private Button mCaptureBtn;
     private ToggleButton mRecordBtn;
     private PictureHandle picturehandle = new PictureHandle(this);
     private ImageView mTrackingImage1;
@@ -183,17 +181,9 @@ public class CameraActivity extends FPVActivity implements TextureView.SurfaceTe
     private void initUI() {
         mCaptureBtn = (Button) findViewById(R.id.btn_capture);
         mRecordBtn = (ToggleButton) findViewById(R.id.btn_record);
-        mCameraRiseBtn = (Button) findViewById(R.id.btn_camera_rise);
-        mCameraDownBtn = (Button) findViewById(R.id.btn_camera_down);
         mTrackingImage1 = (ImageView) findViewById(R.id.camera_tracking_send_rect);
         mTrackingImage2 = (ImageView) findViewById(R.id.camera_tracking_small_rect);
         mCaptureBtn.setOnClickListener(this);
-        mCameraRiseBtn.setOnClickListener(this);
-        mCameraRiseBtn.setOnTouchListener(this);
-        mCameraRiseBtn.setBackgroundColor(getColor(R.color.colorPrimary));
-        mCameraDownBtn.setOnClickListener(this);
-        mCameraDownBtn.setOnTouchListener(this);
-        mCameraDownBtn.setBackgroundColor(getColor(R.color.colorPrimary));
         mRecordBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -214,86 +204,9 @@ public class CameraActivity extends FPVActivity implements TextureView.SurfaceTe
                 new FileSaver(bitmap).save();
                 break;
             }
-            case R.id.btn_camera_rise:{
-                Log.d(TAG,"camera rise pressed");
-                break;
-            }
-            case R.id.btn_camera_down:{
-                Log.d(TAG,"camera down pressed");
-                break;
-            }
             default:
                 break;
         }
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (v.getId() == R.id.btn_camera_rise) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                mCameraRiseBtn.setBackgroundColor(getColor(R.color.colorPrimary));
-                if (timer != null) {
-                    if (gimbalRotationTimerTask != null) {
-                        gimbalRotationTimerTask.cancel();
-                    }
-                    timer.cancel();
-                    timer.purge();
-                    gimbalRotationTimerTask = null;
-                    timer = null;
-                }
-                if (ModuleVerificationUtil.isGimbalModuleAvailable()) {
-                    DJSDKApplication.getProductInstance().getGimbal().
-                            rotate(null, new CommonCallbacks.CompletionCallback() {
-
-                                @Override
-                                public void onResult(DJIError error) {
-
-                                }
-                            });
-                }
-            }
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mCameraRiseBtn.setBackgroundColor(getColor(R.color.colorAccent));
-                if (timer == null) {
-                    timer = new Timer();
-                    gimbalRotationTimerTask = new GimbalRotateTimerTask(10);
-                    timer.schedule(gimbalRotationTimerTask, 0, 100);
-                }
-            }
-        }
-        if (v.getId() == R.id.btn_camera_down) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                mCameraDownBtn.setBackgroundColor(getColor(R.color.colorPrimary));
-                if (timer != null) {
-                    if (gimbalRotationTimerTask != null) {
-                        gimbalRotationTimerTask.cancel();
-                    }
-                    timer.cancel();
-                    timer.purge();
-                    gimbalRotationTimerTask = null;
-                    timer = null;
-                }
-                if (ModuleVerificationUtil.isGimbalModuleAvailable()) {
-                    DJSDKApplication.getProductInstance().getGimbal().
-                            rotate(null, new CommonCallbacks.CompletionCallback() {
-
-                                @Override
-                                public void onResult(DJIError error) {
-
-                                }
-                            });
-                }
-            }
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mCameraDownBtn.setBackgroundColor(getColor(R.color.colorAccent));
-                if (timer == null) {
-                    timer = new Timer();
-                    gimbalRotationTimerTask = new GimbalRotateTimerTask(-10);
-                    timer.schedule(gimbalRotationTimerTask, 0, 100);
-                }
-            }
-        }
-        return true;
     }
 
     private class FileSaver implements Runnable {
@@ -324,33 +237,6 @@ public class CameraActivity extends FPVActivity implements TextureView.SurfaceTe
                 showToast("photo saved");
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    private static class GimbalRotateTimerTask extends TimerTask {
-        float pitchValue;
-
-        GimbalRotateTimerTask(float pitchValue) {
-            super();
-            this.pitchValue = pitchValue;
-        }
-        @Override
-        public void run() {
-            if (ModuleVerificationUtil.isGimbalModuleAvailable()) {
-                DJSDKApplication.getProductInstance().getGimbal().
-                        rotate(new Rotation.Builder().pitch(pitchValue)
-                                .mode(RotationMode.SPEED)
-                                .yaw(Rotation.NO_ROTATION)
-                                .roll(Rotation.NO_ROTATION)
-                                .time(0)
-                                .build(), new CommonCallbacks.CompletionCallback() {
-
-                            @Override
-                            public void onResult(DJIError error) {
-
-                            }
-                        });
             }
         }
     }
