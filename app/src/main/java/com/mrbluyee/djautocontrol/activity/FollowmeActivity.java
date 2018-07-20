@@ -254,7 +254,8 @@ public class FollowmeActivity extends FragmentActivity implements View.OnClickLi
             super.handleMessage(msg);
             // 此处可以更新UI
             Bundle b = msg.getData();
-            SparseArray<ChargeStationInfo> stationInfos_temp = webrequest.chargeStationgpsInfoHandler(b);
+            SparseArray<ChargeStationInfo> stationInfos_temp = new SparseArray<ChargeStationInfo>();
+            webrequest.chargeStationgpsInfoHandler(b,stationInfos_temp);
             if(stationInfos_temp != null) {
                 runOnUiThread(new Runnable() {
                     @Override

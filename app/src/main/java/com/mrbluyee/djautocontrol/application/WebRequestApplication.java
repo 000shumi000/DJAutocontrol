@@ -50,15 +50,13 @@ public class WebRequestApplication {
         }).start();
     }
 
-    public SparseArray<ChargeStationInfo> chargeStationgpsInfoHandler(Bundle b)
+    public void chargeStationgpsInfoHandler(Bundle b,SparseArray<ChargeStationInfo> stationInfos)
     {
-        SparseArray<ChargeStationInfo> stationInfos = null;
         JSONArray station_gps_jsonArray = null;
         String station_gps_data = b.getString("getgps");
         if(station_gps_data != null) {
             //Log.d("MyHandler", station_gps_data);
             try {
-                stationInfos = new SparseArray<ChargeStationInfo>();
                 station_gps_jsonArray = new JSONArray(station_gps_data);
                 for (int i = 0; i < station_gps_jsonArray.length(); i++) {
                     JSONObject jsonObject = station_gps_jsonArray.getJSONObject(i);
@@ -79,7 +77,6 @@ public class WebRequestApplication {
                 e.printStackTrace();
             }
         }
-        return stationInfos;
     }
 
     public void Get_chargesite_info(final Handler UIHandler,final String stationid){

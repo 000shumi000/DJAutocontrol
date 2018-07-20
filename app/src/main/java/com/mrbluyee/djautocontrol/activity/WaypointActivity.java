@@ -83,7 +83,7 @@ public class WaypointActivity extends FragmentActivity implements View.OnClickLi
     private Marker droneMarker = null;
 
     private float altitude = 100.0f;
-    private float mSpeed = 10.0f;
+    private float mSpeed = 5.0f;
 
     private List<Waypoint> waypointList = new ArrayList<>();
 
@@ -202,17 +202,19 @@ public class WaypointActivity extends FragmentActivity implements View.OnClickLi
             super.handleMessage(msg);
             // 此处可以更新UI
             Bundle b = msg.getData();
-            SparseArray<ChargeStationInfo> stationInfos_temp = webrequest.chargeStationgpsInfoHandler(b);
-            for(int i = 0;i<stationInfos_temp.size();i++){
-                int station_id = stationInfos_temp.keyAt(i);
-                ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
-                if(stationInfos.indexOfKey(stationInfos_temp.keyAt(i)) == -1){    //no data
-                    stationInfos.append(station_id,updatetationInfo);
+            SparseArray<ChargeStationInfo> stationInfos_temp = new SparseArray<ChargeStationInfo>();
+            webrequest.chargeStationgpsInfoHandler(b,stationInfos_temp);
+            if(stationInfos_temp != null) {
+                for (int i = 0; i < stationInfos_temp.size(); i++) {
+                    int station_id = stationInfos_temp.keyAt(i);
+                    ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
+                    if (stationInfos.indexOfKey(stationInfos_temp.keyAt(i)) == -1) {    //no data
+                        stationInfos.append(station_id, updatetationInfo);
+                    } else { //update data
+                        stationInfos.put(station_id, updatetationInfo);
+                    }
+                    markchargesite(updatetationInfo.getStationPos(), "" + station_id);
                 }
-                else { //update data
-                    stationInfos.put(station_id, updatetationInfo);
-                }
-                markchargesite(updatetationInfo.getStationPos(), "" + station_id);
             }
         }
     }
@@ -443,7 +445,6 @@ public class WaypointActivity extends FragmentActivity implements View.OnClickLi
         float zoomlevel = (float) 18.0;
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(pos, zoomlevel);
         aMap.moveCamera(cu);
-
     }
 
     private void enableDisableAdd(){

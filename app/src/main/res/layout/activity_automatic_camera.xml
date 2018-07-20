@@ -135,6 +135,19 @@
 
     </LinearLayout>
 
+    <ToggleButton
+        android:id="@+id/auto_start_btn"
+        android:background="@drawable/pointing_start"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/camera"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        android:checked="false"
+        android:textOff="Go"
+        android:textOn="Stop"
+        android:text="Go" />
 
     <!--Take off and return home buttons on left -->
     <LinearLayout
