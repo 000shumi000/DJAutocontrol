@@ -201,7 +201,7 @@ public class AutomaticActivity extends Activity {
                 for (int i = 0; i < stationInfos_temp.size(); i++) {
                     int station_id = stationInfos_temp.keyAt(i);
                     ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
-                    if (stationInfos.indexOfKey(stationInfos_temp.keyAt(i)) == -1) {    //no data
+                    if (stationInfos.d(stationInfos_temp.keyAt(i)) == -1) {    //no data
                         stationInfos.append(station_id, updatetationInfo);
                     } else { //update data
                         stationInfos.put(station_id, updatetationInfo);
