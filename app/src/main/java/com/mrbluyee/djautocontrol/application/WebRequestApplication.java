@@ -52,6 +52,7 @@ public class WebRequestApplication {
 
     public void chargeStationgpsInfoHandler(Bundle b,SparseArray<ChargeStationInfo> stationInfos)
     {
+        SparseArray<ChargeStationInfo> stationInfos_temp = new SparseArray<ChargeStationInfo>();
         JSONArray station_gps_jsonArray = null;
         String station_gps_data = b.getString("getgps");
         if(station_gps_data != null) {
@@ -67,14 +68,24 @@ public class WebRequestApplication {
                     String station_create_time = jsonObject.getString("create_time");
                     String station_update_time = jsonObject.getString("update_time");
                     ChargeStationInfo stationInfo = new ChargeStationInfo();
+                    stationInfo.setStationId("" + station_id);
                     stationInfo.setStationPos(station_pos);
                     stationInfo.setStation_create_time(station_create_time);
                     stationInfo.setStation_update_time(station_update_time);
-                    stationInfos.append(station_id, stationInfo);
+                    stationInfos_temp.append(station_id, stationInfo);
                     //Log.d("MyHandler", "append station:"+ station_id);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+        for (int i = 0; i < stationInfos_temp.size(); i++) {
+            int station_id = stationInfos_temp.keyAt(i);
+            ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
+            if (stationInfos.indexOfKey(station_id) < 0) {    //no data
+                stationInfos.append(station_id, updatetationInfo);
+            } else { //update data
+                stationInfos.put(station_id, updatetationInfo);
             }
         }
     }
@@ -111,9 +122,8 @@ public class WebRequestApplication {
         }).start();
     }
 
-    public ChargeStationInfo chargeSiteInfoHandler(Bundle b)
+    public void chargeSiteInfoHandler(Bundle b,ChargeStationInfo stationInfo)
     {
-        ChargeStationInfo stationInfo = new ChargeStationInfo();
         JSONObject station_info_json = null;
         String station_info_data = b.getString("getinfo");
         if(station_info_data != null) {
@@ -138,7 +148,6 @@ public class WebRequestApplication {
                 e.printStackTrace();
             }
         }
-        return stationInfo;
     }
 
     public void Post_drone_info(final String droneinfo) {

@@ -184,13 +184,12 @@ public class AutomaticActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
-            Log.d(TAG,"handleMessage");
+            //Log.d(TAG,"handleMessage");
             super.handleMessage(msg);
             // 此处可以更新UI
             Bundle b = msg.getData();
-            SparseArray<ChargeStationInfo> stationInfos_temp = new SparseArray<ChargeStationInfo>();
-            webrequest.chargeStationgpsInfoHandler(b,stationInfos_temp);
-            if(stationInfos_temp != null) {
+            webrequest.chargeStationgpsInfoHandler(b,stationInfos);
+            if(stationInfos != null) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -198,17 +197,12 @@ public class AutomaticActivity extends Activity {
                     }
                 });
                 markphone();
-                for (int i = 0; i < stationInfos_temp.size(); i++) {
-                    int station_id = stationInfos_temp.keyAt(i);
-                    ChargeStationInfo updatetationInfo = stationInfos_temp.valueAt(i);
-                    if (stationInfos.d(stationInfos_temp.keyAt(i)) == -1) {    //no data
-                        stationInfos.append(station_id, updatetationInfo);
-                    } else { //update data
-                        stationInfos.put(station_id, updatetationInfo);
-                    }
+                for (int i = 0; i < stationInfos.size(); i++) {
+                    int station_id = stationInfos.keyAt(i);
+                    ChargeStationInfo updatetationInfo = stationInfos.valueAt(i);
                     if(station_id == 112130) {
-                        selectedChargeStation = updatetationInfo;
-                        Log.i(TAG, "selectedChargeStation " + updatetationInfo.getStationId());
+                        selectedChargeStation = stationInfos.get(station_id);
+                        //Log.i(TAG, "selectedChargeStation " + selectedChargeStation.getStationId());
                     }
                     DJILatLng station_location = new DJILatLng(updatetationInfo.getStationPos().latitude,updatetationInfo.getStationPos().longitude);
                     markchargesite(station_location, "" + station_id);
@@ -494,13 +488,15 @@ public class AutomaticActivity extends Activity {
     }
 
     private void configWayPointMission(){
-        waypointList.clear();
+        if(waypointList.size() > 0){
+            waypointList.clear();
+            waypointMissionBuilder.waypointList(waypointList);
+        }
         if(selectedChargeStation != null) {
-            Log.i(TAG, "chargeStationInfo:"+ selectedChargeStation.getStationId());
             LatLng station_location = selectedChargeStation.getStationPos();
             LatLng gps_point = AmapToGpsUtil.toGPSPoint(station_location.latitude, station_location.longitude);
             Waypoint mWaypoint1 = new Waypoint(gps_point.latitude, gps_point.longitude, altitude);
-            Waypoint mWaypoint2 = new Waypoint(gps_point.latitude, gps_point.longitude, 50.0f);
+            Waypoint mWaypoint2 = new Waypoint(gps_point.latitude, gps_point.longitude, 20.0f);
             //Add Waypoints to Waypoint arraylist;
             if (waypointMissionBuilder != null) {
                 waypointList.add(mWaypoint1);

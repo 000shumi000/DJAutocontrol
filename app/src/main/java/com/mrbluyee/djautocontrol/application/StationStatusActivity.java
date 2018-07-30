@@ -169,7 +169,7 @@ public class StationStatusActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             super.handleMessage(msg);
             Bundle b = msg.getData();
-            chargeStationInfo = webrequest.chargeSiteInfoHandler(b);
+            webrequest.chargeSiteInfoHandler(b,chargeStationInfo);
             if (chargeStationInfo.getStationId()!=null && chargeStationInfo.getStationId() != "0") {
                 textid.setText("充电站ID：" + chargeStationInfo.getStationId());
                 text3.setText("更新时间：" + chargeStationInfo.getStation_update_time());
