@@ -9,73 +9,170 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/main_activity_linearLayout2"
-        android:orientation="vertical">
-        <Button
+        android:orientation="vertical"
+        android:background="@color/aaaaBlue"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/user_icon"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:background="@mipmap/ic" />
+
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/drone_status_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/drone_status" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="14dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/drone_status"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/camera_fpv_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/camera_fpv" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/camera_fpv"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/remote_control_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/remote_control" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/remote_control"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/gps_track_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/gps_track" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/gps_track"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/gps_route_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/gps_route" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/gps_route"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/static_track_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/static_track" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/static_track"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/moving_track_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/moving_track" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/moving_track"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/site_landing_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/site_landing" />
-
-        <Button
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/site_landing"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.flyco.roundview.RoundTextView style="@style/AppTheme.LabelTitle"
             android:id="@+id/automatic_handle_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/automatic_handle" />
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:width="200dp"
+            android:paddingBottom="10dp"
+            android:text="@string/automatic_handle"
+            app:rv_strokeWidth="2dp"
+            app:rv_isRadiusHalfHeight="true"
+            app:rv_strokeColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/main_activity_linearLayout2"
         android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:orientation="vertical">
+        <TextView  style="@style/AppTheme.Discription"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:text="上海大学 光接入实验室"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|bottom"
-
             android:text="@string/copy_right" />
     </LinearLayout>
 </RelativeLayout>
