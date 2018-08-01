@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -30,7 +31,7 @@ import dji.sdk.sdkmanager.DJISDKManager;
 
 public class PushDataActivity extends Activity {
 
-    private TextView t,a,b,c,d,m,n,o,p;
+    private TextView t,a,b,c,d,m,n,o,p,f,h;
     private BaseProduct mproduct = null;
     private FlightController mFlightController = null;
     private DroneStatusInfo DS = null;
@@ -119,6 +120,8 @@ public class PushDataActivity extends Activity {
         n=(TextView) findViewById(R.id.textn);
         o=(TextView) findViewById(R.id.texto);
         p=(TextView) findViewById(R.id.textp);
+        h=(TextView) findViewById(R.id.texth);
+        f=(TextView) findViewById(R.id.textf);
         t.setText("\n无人机实时状态参数显示\n");
     }
 
@@ -133,7 +136,9 @@ public class PushDataActivity extends Activity {
                 m.setText("充电状态： "+(DS.getCharge_status()==1?"充电中":"放电中")+"\n");
                 n.setText("经度："+DS.getLongitude()+"\n");
                 o.setText("纬度："+DS.getLatitude()+"\n");
-                p.setText("连接状态："+(DS.getConnect_status()==1?"连接中":"连接断开！"));
+                p.setText("连接状态："+(DS.getConnect_status()==1?"连接中":"连接断开！")+"\n");
+                h.setText("飞行高度： "+DS.getAltitude()+"米\n");
+                f.setText("飞行状态： "+(DS.getIsflying()==true?"正在飞行中":"静止中"));
             }
         });
     }
@@ -143,6 +148,7 @@ public class PushDataActivity extends Activity {
         if (mproduct != null && mproduct.isConnected()) {
             if (mproduct instanceof Aircraft) {
                 mFlightController = ((Aircraft)mproduct).getFlightController();
+
                 mproduct.getBattery().setStateCallback(new BatteryState.Callback() {
                     @Override
                     public void onUpdate(BatteryState djiBatteryState) {
@@ -171,6 +177,8 @@ public class PushDataActivity extends Activity {
                         @Override
                         public void onUpdate(FlightControllerState
                                                      djiFlightControllerCurrentState) {
+                            DS.setIsflying(djiFlightControllerCurrentState.isFlying());
+                            DS.setAltitude(djiFlightControllerCurrentState.getAircraftLocation().getAltitude());
                             DS.setLatitude(djiFlightControllerCurrentState.getAircraftLocation().getLatitude());
                             DS.setLongitude(djiFlightControllerCurrentState.getAircraftLocation().getLongitude());
                             updateUI();

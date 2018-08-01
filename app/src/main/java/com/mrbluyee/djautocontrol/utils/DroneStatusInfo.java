@@ -6,6 +6,24 @@ public class DroneStatusInfo {
     private int charge,voltage,current;
     private float temperature;
     private double longitude,latitude;
+    private boolean isflying;
+    private float altitude;
+
+    public float getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(float altitude) {
+        this.altitude = altitude;
+    }
+
+    public boolean getIsflying() {
+        return isflying;
+    }
+
+    public void setIsflying(boolean isflying) {
+        this.isflying = isflying;
+    }
 
     public void setDrone_id(String drone_id){
         this.drone_id = drone_id;
